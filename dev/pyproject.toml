@@ -1,0 +1,16 @@
+[project]
+name = "python-dev-dependencies"
+version = "0.0.0"
+description = "Additional python tooling that gets used across many subsystems"
+readme = "../README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "mkdocs-material>=9.7.6",
+]
+
+[dependency-groups]
+dev = [
+    "commitizen>=4.16.3",
+    "mkdocs==1.6.1", # RIP mkdocs v1
+    "openapi-spec-validator>=0.9.0",
+]

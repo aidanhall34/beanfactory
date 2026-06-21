@@ -1,0 +1,350 @@
+openapi: "3.0.3"
+
+info:
+  title: BeanRouter API
+  version: "1.0.0"
+  description: Trading server API for managing orders, assets, and account balances.
+
+paths:
+  /orders:
+    get:
+      operationId: getOrders
+      summary: Get all orders for the authenticated user
+      responses:
+        "200":
+          description: A list of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+    post:
+      operationId: createOrder
+      summary: Place a buy or sell order into the order book
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRequest"
+      responses:
+        "200":
+          description: Order successfully committed to the book
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+  /orders/{id}:
+    get:
+      operationId: getOrderById
+      summary: Get a specific order by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Order ID
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+
+  /order_book/{ticker}:
+    get:
+      operationId: getOrderBook
+      summary: Get the order book for a ticker
+      parameters:
+        - name: ticker
+          in: path
+          required: true
+          description: Ticker symbol
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order book for the requested ticker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrderBook"
+
+  /assets:
+    get:
+      operationId: getAssets
+      summary: Get all assets held by the authenticated user
+      responses:
+        "200":
+          description: A list of asset holdings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Asset"
+
+  /assets/cash:
+    get:
+      operationId: getCash
+      summary: Get the full cash balance (total, escrow, and available)
+      responses:
+        "200":
+          description: Full cash balance breakdown
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CashBalance"
+
+  /assets/cash/{type}:
+    get:
+      operationId: getCashByType
+      summary: Get a specific cash balance type
+      parameters:
+        - name: type
+          in: path
+          required: true
+          description: The balance type to retrieve
+          schema:
+            type: string
+            enum:
+              - total
+              - escrow
+              - available
+      responses:
+        "200":
+          description: The requested cash balance amount
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CashBalanceEntry"
+
+  /assets/{ticker}:
+    get:
+      operationId: getAssetByTicker
+      summary: Get the quantity of a specific ticker held by the authenticated user
+      parameters:
+        - name: ticker
+          in: path
+          required: true
+          description: Ticker symbol
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Asset holding for the specified ticker
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Asset"
+
+  /auth:
+    post:
+      operationId: authenticate
+      summary: Authenticate and receive a session token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRequest"
+      responses:
+        "200":
+          description: Authentication successful
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthResponse"
+
+  /signup:
+    post:
+      operationId: signup
+      summary: Create a new user account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignupRequest"
+      responses:
+        "200":
+          description: User account created successfully
+
+  /admin/load:
+    post:
+      operationId: adminLoad
+      summary: Load cash and/or assets into a user account (admin only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AdminLoadRequest"
+      responses:
+        "200":
+          description: Funds and/or assets loaded successfully
+
+components:
+  schemas:
+    OrderRequest:
+      type: object
+      required:
+        - side
+        - ticker
+        - quantity
+      properties:
+        side:
+          type: string
+          enum:
+            - buy
+            - sell
+        ticker:
+          type: string
+          description: Ticker symbol to trade
+        quantity:
+          type: number
+          description: Number of units to buy or sell
+        price:
+          type: number
+          description: Limit price; omit for market orders
+
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+        side:
+          type: string
+          enum:
+            - buy
+            - sell
+        ticker:
+          type: string
+        quantity:
+          type: number
+        price:
+          type: number
+        status:
+          type: string
+          enum:
+            - pending
+            - open
+            - partially_filled
+            - filled
+            - cancelled
+        created_at:
+          type: string
+          format: date-time
+
+    OrderBook:
+      type: object
+      properties:
+        ticker:
+          type: string
+        bids:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderBookLevel"
+        asks:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderBookLevel"
+
+    OrderBookLevel:
+      type: object
+      properties:
+        price:
+          type: number
+        quantity:
+          type: number
+
+    Asset:
+      type: object
+      properties:
+        ticker:
+          type: string
+        quantity:
+          type: number
+
+    CashBalance:
+      type: object
+      properties:
+        total:
+          type: number
+          description: Total funds on account
+        escrow:
+          type: number
+          description: Funds locked in open orders
+        available:
+          type: number
+          description: Funds available to trade
+
+    CashBalanceEntry:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - total
+            - escrow
+            - available
+        amount:
+          type: number
+
+    AuthRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Bearer token for subsequent requests
+
+    SignupRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+
+    AdminLoadRequest:
+      type: object
+      required:
+        - username
+      properties:
+        username:
+          type: string
+          description: Target user account
+        cash:
+          type: number
+          description: Amount of cash to load
+        assets:
+          type: array
+          description: Asset positions to load
+          items:
+            type: object
+            required:
+              - ticker
+              - quantity
+            properties:
+              ticker:
+                type: string
+              quantity:
+                type: number

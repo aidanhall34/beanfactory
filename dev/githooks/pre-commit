@@ -1,3 +1,15 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+
 set -euo pipefail
 
+# Crash if attempting to commit to the main branch
+# This is enforced for realzies in the hosted repo.
+export BRANCH=$(git branch --show-current)
+if [[ $BRANCH == "main" ]] ;
+then
+    echo "DO NOT COMMIT DIRECTLY TO THE MAIN BRANCH" ;
+    echo "You likely forgot to checkout to a development branch" ;
+    exit 1 ;
+fi ;
+
+make git.pre-commit

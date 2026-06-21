@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-
+# https://hub.docker.com/layers/trufflesecurity/trufflehog/3.95.6/images/sha256-8fcc7f10e11856f98d92fd86b66f7d63a32591cf934ff9f6438f4092b183510b
 docker run \
     -it \
     -v "$PWD:/pwd" \
