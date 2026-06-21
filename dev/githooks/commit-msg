@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+set -euo pipefail
+
+make git.commit.msg MSG="$1"

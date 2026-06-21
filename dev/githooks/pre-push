@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+set -euo pipefail
+
+
+docker run \
+    -it \
+    -v "$PWD:/pwd" \
+    "ghcr.io/trufflesecurity/trufflehog@sha256:96f8429082cb2d4ae73b1096dcdb2f5aa139881d97042b0c5e5fa226a392e056" \
+    git \
+    file:///pwd
