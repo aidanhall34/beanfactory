@@ -1,0 +1,14 @@
+{
+  "name": "dev",
+  "version": "1.0.0",
+  "description": "Additional JS tooling that gets used across many subsystems",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "markdownlint-cli2": "^0.22.1"
+  }
+}

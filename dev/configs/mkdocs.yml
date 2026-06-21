@@ -1,0 +1,28 @@
+site_name: Bean Factory Docs
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      primary: green
+      accent: lime
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      primary: green
+      accent: lime
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+
+docs_dir: ../../docs
+site_dir: ../../build/docs
+
+markdown_extensions:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

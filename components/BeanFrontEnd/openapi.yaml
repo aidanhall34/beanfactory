@@ -1,0 +1,46 @@
+openapi: "3.0.3"
+info:
+  title: "BeanFrontEnd"
+  version: "0.0.0"
+  description: "Pages served by the BeanFrontEnd"
+paths:
+  /:
+    get:
+      summary: "Home Page"
+      description: "Returns the home page"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/html:
+              schema:
+                type: string
+  /login:
+    get:
+      description: "Returns the login page"
+      summary: "Login page"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/html:
+              schema:
+                type: string
+  /register:
+    get:
+      description: "Returns the new account registration page"
+      summary: "Registration page"
+      responses:
+        "200":
+          description: Success
+          content:
+            text/html:
+              schema:
+                type: string
+
+components:
+  securitySchemes:
+    user_authenticated:
+      type: "http"
+      scheme: "bearer"
+      bearerFormat: JWT

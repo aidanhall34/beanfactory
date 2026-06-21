@@ -1,4 +1,4 @@
-The BEANfactory
+# The Bean factory
 
 ## Requirements
 
@@ -18,6 +18,6 @@ PRs for ARM build pipelines are welcome.
 ```sh
 # Installs development dependencies
 make init
-# Runs the BEANfactory components in docker containers
+# Runs the Bean factory components in docker containers
 make run
 ```

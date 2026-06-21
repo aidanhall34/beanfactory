@@ -1,12 +1,12 @@
 # BeanFrontEnd™
 
-- Language: Python
-- http framework: Flask
-- Description: |\
-    Servers static files to the client. It is the entry point into the "frontend" of the exchange.\
-    It uses flask and jinja templates.\
-    The trading JS file establishes an SSE connection to the BeanWebConnector™, that listens for the latest price updates and renders them in the UI.
+The BeanFrontEnd is a fastAPI server that
+serves static files to users.
+The application is stateless, everything it needs is contained within its docker image.
 
+It serves as the "frontend" of the exchange.
+
+The trading JS file establishes an SSE connection to the BeanWebConnector™, that listens for the latest price updates and renders them in the UI.
 
 ```mermaid
 flowchart
@@ -31,4 +31,3 @@ flowchart
     serve_static_file -- /order_history --> ordhisthtml
     tradingjs --Establish\nHTTP/3 Websocket connection--> BeanWebConnector
 ```
-
