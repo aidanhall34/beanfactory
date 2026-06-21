@@ -80,7 +80,7 @@ validate.openapi:
 # https://hub.docker.com/layers/trufflesecurity/trufflehog/3.95.6/images/sha256-8fcc7f10e11856f98d92fd86b66f7d63a32591cf934ff9f6438f4092b183510b
 trufflehog.scan:
 	docker run \
-		-v "$PWD:/pwd" \
+		-v "$$(PWD):/pwd" \
 		"ghcr.io/trufflesecurity/trufflehog@sha256:96f8429082cb2d4ae73b1096dcdb2f5aa139881d97042b0c5e5fa226a392e056" \
 		git \
 		file:///pwd
